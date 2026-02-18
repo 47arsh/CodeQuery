@@ -1,29 +1,40 @@
-import { storage } from "./config";
 import { Permission, Role } from "node-appwrite";
 import { questionAttachmentBucket } from "../name";
+import { storage } from "./config";
 
-export default async function createStorageBucket() {
+export default async function getOrCreateStorage() {
 
   try {
 
-    await storage.createBucket(
-      questionAttachmentBucket,     // bucket id from name.ts
-      "question-attachments",       // display name in Appwrite dashboard
-      [
-        Permission.read(Role.any()),
-        Permission.create(Role.users()),
-        Permission.update(Role.users()),
-        Permission.delete(Role.users()),
-      ],
-      false,   // fileSecurity: use bucket-level permissions
-      true     // enabled: allow uploads
-    );
+    // try to fetch existing bucket
+    await storage.getBucket(questionAttachmentBucket);
+    console.log("Storage connected (bucket already exists)");
 
-    console.log("Storage bucket created");
+  } catch (error) {
 
-  } catch (err) {
+    // if bucket not found → create it
+    try {
 
-    console.error("Storage bucket error:", err);
+      await storage.createBucket(
+        questionAttachmentBucket,   // bucket id
+        questionAttachmentBucket,   // bucket display name
+        [
+          Permission.read(Role.any()),
+          Permission.create(Role.users()),
+          Permission.update(Role.users()),
+          Permission.delete(Role.users()),
+        ],
+        false,   // fileSecurity
+        true     // enabled
+      );
+
+      console.log("Storage bucket created");
+
+    } catch (createError) {
+
+      console.error("Storage creation failed:", createError);
+
+    }
 
   }
 
