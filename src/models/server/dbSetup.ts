@@ -4,7 +4,7 @@ import createAnswerCollection from "./answer.collection";
 import createCommentCollection from "./comment.collection";
 import createQuestionCollection from "./question.collection";
 import createVoteCollection from "./vote.collection";
-import getOrCreateStorage from "./storage.collection";
+import getOrCreateStorage from "./storageSetup";
 
 import { databases } from "./config";
 
