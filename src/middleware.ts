@@ -14,6 +14,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico).*)", //this is a regex which implies to avoid these paths, however matcher matches and runs only where it matches!
   ],
 };
